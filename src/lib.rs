@@ -14,6 +14,7 @@ pub enum Direction {
     Left
 }
 
+#[derive(Clone)]
 // Create snake
 pub struct SnakeCell(usize);
 
@@ -87,8 +88,16 @@ impl World {
 
     // update the position
     pub fn update(&mut self) {
+        let temp = self.snake.body.clone();
         let next_cell = self.generate_next_snake_cell();
         self.snake.body[0] = next_cell;
+
+        let length = self.snake.body.len();
+
+        // Moving the cells --> starting from the body (not the head)
+        for i in 1..length {
+            self.snake.body[i] = SnakeCell(temp[i - 1].0);
+        }
     }
 
     fn generate_next_snake_cell(&self) -> SnakeCell {
