@@ -70,9 +70,22 @@ init().then((wasm) => {
     ctx.stroke()
   }
 
+  function drawReward() {
+    const rewardIndex = world.reward_cell()
+    const col = rewardIndex % worldWidth
+    const row = Math.floor(rewardIndex / worldWidth)
+
+    ctx.beginPath()
+    ctx.fillStyle = '#FF0000'
+    ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+
+    ctx.stroke()
+  }
+
   function paint() {
     drawWorld()
     drawSnake()
+    drawReward()
   }
 
   // update world

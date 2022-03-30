@@ -43,7 +43,8 @@ pub struct World {
     width: usize,
     size: usize,
     snake: Snake,
-    next_cell: Option <SnakeCell> // option enum
+    next_cell: Option <SnakeCell>, // option enum
+    reward_cell: usize
 }
 
 #[wasm_bindgen]
@@ -53,13 +54,19 @@ impl World {
             width,
             size: width * width,
             snake: Snake::new(snake_index, 3), // start index 10
-            next_cell: None
+            next_cell: None,
+            reward_cell: 10
         }
     }
 
     // create getter for width
     pub fn width(&self) -> usize {
         self.width
+    }
+
+    // reward cell
+    pub fn reward_cell(&self) -> usize {
+        self.reward_cell
     }
 
     // snake to the world
