@@ -14,7 +14,7 @@ pub enum Direction {
     Left
 }
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 // Create snake
 pub struct SnakeCell(usize);
 
@@ -43,6 +43,7 @@ pub struct World {
     width: usize,
     size: usize,
     snake: Snake,
+    next_cell: Option <SnakeCell> // option enum
 }
 
 #[wasm_bindgen]
@@ -51,7 +52,8 @@ impl World {
         World {
             width,
             size: width * width,
-            snake: Snake::new(snake_index, 3) // start index 10
+            snake: Snake::new(snake_index, 3), // start index 10
+            next_cell: None
         }
     }
 
@@ -70,6 +72,7 @@ impl World {
 
         if self.snake.body[1].0 == next_cell.0 { return; }
 
+        self.next_cell = Some(next_cell);
         self.snake.direction = direction;
     }
 
@@ -93,8 +96,17 @@ impl World {
     // update the position
     pub fn update(&mut self) {
         let temp = self.snake.body.clone();
-        let next_cell = self.generate_next_snake_cell(&self.snake.direction);
-        self.snake.body[0] = next_cell;
+
+        match self.next_cell {
+            Some(cell) => {
+                self.snake.body[0] = cell;
+                self.next_cell = None;
+            },
+            None => {
+                // Generate a next cell
+                self.snake.body[0] = self.generate_next_snake_cell(&self.snake.direction);
+            }
+        }
 
         let length = self.snake.body.len();
 
