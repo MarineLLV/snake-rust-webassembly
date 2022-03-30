@@ -58,21 +58,27 @@ impl World {
     pub fn new(width: usize, snake_index: usize) -> World {
         let snake = Snake::new(snake_index, 3);
         let size = width * width;
-        let mut reward_cell;
-
-        loop {
-            reward_cell = random(size);
-            // check if body contains reward
-            if !snake.body.contains(&SnakeCell(reward_cell)) { break; }
-        }
 
         World {
             width,
             size,
+            reward_cell: World::generate_reward_cell(size, &snake.body),
             snake,
             next_cell: None,
-            reward_cell,
         }
+    }
+
+    // generate a reward cell
+    fn generate_reward_cell(max: usize, snake_body: &Vec<SnakeCell>) -> usize {
+        let mut reward_cell;
+
+        loop {
+            reward_cell = random(max);
+            // check if body contains reward
+            if !snake_body.contains(&SnakeCell(reward_cell)) { break; }
+        }
+
+        reward_cell
     }
 
     // create getter for width
@@ -140,7 +146,9 @@ impl World {
 
         // Consuming reward
         if self.reward_cell == self.snake_head_index() {
-            self.snake.body.push(SnakeCell(self.snake.body[1].0))
+            self.snake.body.push(SnakeCell(self.snake.body[1].0));
+            // generate new cell
+            self.reward_cell = World::generate_reward_cell(self.size, &self.snake.body)
         }
 
     }
