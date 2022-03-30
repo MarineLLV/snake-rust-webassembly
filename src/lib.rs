@@ -5,9 +5,9 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 // import date function from js
-#[wasm_bindgen(module= "/www/utils/date.js")]
+#[wasm_bindgen(module= "/www/utils/random.js")]
 extern {
-    fn now() -> usize;
+    fn random(max: usize) -> usize;
 }
 
 #[wasm_bindgen]
@@ -57,7 +57,7 @@ pub struct World {
 impl World {
     pub fn new(width: usize, snake_index: usize) -> World {
         let size = width * width;
-        let reward_cell = now() % size;
+        let reward_cell = random(size);
 
         World {
             width,

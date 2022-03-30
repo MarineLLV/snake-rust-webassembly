@@ -1,9 +1,10 @@
 import init, { World, Direction } from 'snake_game'
+import { random } from './utils/random'
 
 init().then((wasm) => {
   const CELL_SIZE = 10
   const WORLD_WIDTH = 8
-  const snake_spawn_index = Date.now() % (WORLD_WIDTH * WORLD_WIDTH) // random spawn
+  const snake_spawn_index = random(WORLD_WIDTH * WORLD_WIDTH) // random spawn
 
   const world = World.new(WORLD_WIDTH, snake_spawn_index)
   const worldWidth = world.width()
