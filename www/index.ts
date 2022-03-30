@@ -2,8 +2,10 @@ import init, { World } from 'snake_game'
 
 init().then((_) => {
   const CELL_SIZE = 10
+  const WORLD_WIDTH = 8
+  const snake_spawn_index = Date.now() % (WORLD_WIDTH * WORLD_WIDTH) // random spawn
 
-  const world = World.new()
+  const world = World.new(WORLD_WIDTH, snake_spawn_index)
   const worldWidth = world.width()
 
   const canvas = <HTMLCanvasElement>document.getElementById('snake-canvas')
@@ -47,6 +49,7 @@ init().then((_) => {
 
   // update world
   function update() {
+    const fps = 5
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       // position
@@ -54,7 +57,7 @@ init().then((_) => {
       paint()
       // synchronize - request the next animation
       requestAnimationFrame(update)
-    }, 100)
+    }, 1000 / fps)
   }
 
   paint()
