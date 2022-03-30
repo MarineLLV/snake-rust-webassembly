@@ -14,18 +14,6 @@ init().then((wasm) => {
   canvas.height = worldWidth * CELL_SIZE
   canvas.width = worldWidth * CELL_SIZE
 
-  const snakeCellPtr = world.snake_cells() // pointer to the snake cells
-  const snakeLength = world.snake_length()
-
-  // access the pointer - extract from the memory
-  const snakeCells = new Uint32Array(
-    wasm.memory.buffer,
-    snakeCellPtr,
-    snakeLength,
-  )
-
-  console.log(snakeCells)
-
   document.addEventListener('keydown', (e) => {
     switch (e.code) {
       case 'ArrowUp':
@@ -62,12 +50,21 @@ init().then((wasm) => {
   }
 
   function drawSnake() {
-    const snakeIndex = world.snake_head_index()
-    const col = snakeIndex % worldWidth
-    const row = Math.floor(snakeIndex / worldWidth)
+    // access snake cells
+    const snakeCells = new Uint32Array(
+      wasm.memory.buffer,
+      world.snake_cells(),
+      world.snake_length(),
+    )
 
-    ctx.beginPath()
-    ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+    snakeCells.forEach((cellIndex) => {
+      const col = cellIndex % worldWidth
+      const row = Math.floor(cellIndex / worldWidth)
+
+      ctx.beginPath()
+      ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+    })
+
     ctx.stroke()
   }
 
