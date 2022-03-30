@@ -81,6 +81,10 @@ init().then((wasm) => {
     ctx.fillRect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
 
     ctx.stroke()
+
+    if (rewardIndex == 1000) {
+      alert('You won!')
+    }
   }
 
   function paint() {
