@@ -1,4 +1,4 @@
-import init, { World } from 'snake_game'
+import init, { World, Direction } from 'snake_game'
 
 init().then((_) => {
   const CELL_SIZE = 10
@@ -17,16 +17,16 @@ init().then((_) => {
   document.addEventListener('keydown', (e) => {
     switch (e.code) {
       case 'ArrowUp':
-        console.log('Change dir to up')
+        world.change_snake_dir(Direction.Up)
         break
       case 'ArrowRight':
-        console.log('Change dir to right')
+        world.change_snake_dir(Direction.Right)
         break
       case 'ArrowDown':
-        console.log('Change dir to down')
+        world.change_snake_dir(Direction.Down)
         break
       case 'ArrowLeft':
-        console.log('Change dir to left')
+        world.change_snake_dir(Direction.Left)
         break
     }
   })
