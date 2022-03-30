@@ -1,6 +1,6 @@
 import init, { World, Direction } from 'snake_game'
 
-init().then((_) => {
+init().then((wasm) => {
   const CELL_SIZE = 10
   const WORLD_WIDTH = 8
   const snake_spawn_index = Date.now() % (WORLD_WIDTH * WORLD_WIDTH) // random spawn
@@ -13,6 +13,18 @@ init().then((_) => {
 
   canvas.height = worldWidth * CELL_SIZE
   canvas.width = worldWidth * CELL_SIZE
+
+  const snakeCellPtr = world.snake_cells() // pointer to the snake cells
+  const snakeLength = world.snake_length()
+
+  // access the pointer - extract from the memory
+  const snakeCells = new Uint32Array(
+    wasm.memory.buffer,
+    snakeCellPtr,
+    snakeLength,
+  )
+
+  console.log(snakeCells)
 
   document.addEventListener('keydown', (e) => {
     switch (e.code) {
